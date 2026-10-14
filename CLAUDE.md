@@ -102,8 +102,30 @@ culleramotor. `@types/node` va a 24.
 - **Logotip**: el PNG del web actual (646 × 291). La versió per a fons fosc es genera a
   `pnpm images`; quan arribi el vector oficial, la substitueix.
 
-## Pendent abans de publicar
+## Repositori i desplegament
 
-- Repositori remot, projecte de Vercel i domini: no s'ha creat res fora d'aquesta màquina.
+- GitHub: `nertelai-art/arenda-construcciones-web`, **públic** (web de màrqueting, com Calvet).
+  `developer` és la branca d'integració i la per defecte; les branques de feina en surten i hi
+  tornen per PR, amb merge commit.
+- `main` és producció. **Hi arriba només quan l'usuari ho diu, cada vegada**, per PR des de
+  `developer`. Es va crear el 14-10-2026 des de `developer`, a mà, perquè no es pot obrir una PR cap
+  a una branca que no existeix; no s'hi torna a pujar res a mà.
+- Vercel: projecte `arenda-construcciones-web` (equip `nertelai-7298s-projects`), connectat al
+  repositori amb `main` com a branca de producció. Té el símbol QE com a icona (Avatar).
+- **Pujar a `main` no desplega**: `git.deploymentEnabled` de `vercel.json` ho desactiva a posta.
+  Producció és un pas explícit: crear el desplegament des de `main` (connector de Vercel o CLI).
+  La resta de branques fan previsualització en pujar-hi. L'`ignoreCommand` salta qualsevol build de
+  producció que no vingui de `main`.
+- Producció pública: https://arenda-construcciones-web.vercel.app (primer desplegament,
+  14-10-2026, commit `7745662`). No s'indexa fins que sigui al domini del client.
+- El connector de Vercel no té permís per crear projectes (403). La CLI, sí, amb la sessió que ja hi
+  ha en aquesta màquina: `pnpm dlx vercel@64.0.2 …`, des de PowerShell (el Git Bash converteix
+  `/v9/...` en una ruta de Windows). Vercel agafa com a branca de producció la per defecte del
+  repositori en el moment de connectar-lo: es va posar `main` per defecte un moment i es va tornar
+  a `developer`.
+
+## Pendent abans de donar-lo per publicat
+
+- **Domini propi** (quality-constructions.com) i, amb ell, `SITE_URL` i `SITE_INDEXABLE=true`.
 - Proveïdor d'enviament del formulari (darrere d'una frontera pròpia) i, amb ell, l'avís de privacitat.
 - Lighthouse i un iPhone de veritat: les escenes s'han mirat a Chrome d'escriptori i a mida de mòbil.
