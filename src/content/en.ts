@@ -76,6 +76,7 @@ export const en: Dictionary = {
     sr: "Animation: a Mediterranean villa is built layer by layer, from the plan drawn on the ground to the filled pool and the lights on at dusk.",
     staticAlt: "Finished villa with a pool, the kind of house we build.",
     stepLabel: "Step",
+    replay: "Watch it being built again",
   },
   renovation: {
     kicker: "Renovations",
@@ -93,6 +94,7 @@ export const en: Dictionary = {
     resultText: "The illustration is based on this bathroom, renovated by the team. The ‘before’ is generic.",
     sr: "Animation: the old tiles of a bathroom pop off, new pipes appear inside the walls, microcement is spread and the vanity, basins, shower screen and lit mirror are fitted.",
     stepLabel: "Step",
+    replay: "Watch the renovation again",
   },
   remote: {
     kicker: "How we work",

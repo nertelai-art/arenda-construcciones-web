@@ -67,7 +67,8 @@ import {
 } from "./villa-geometry";
 import { BEATS, cameraAt, duskAt, explodeAt, ghostAt, paperToGroundAt } from "./villa-phases";
 
-export type SceneProps = { progress: RefObject<number>; reducedMotion: boolean };
+/** `snapRef`: quan és `true`, l'escena salta al progrés actual en lloc d'anar-hi suaument (en tornar-la a veure). */
+export type SceneProps = { progress: RefObject<number>; snapRef: RefObject<boolean>; reducedMotion: boolean };
 
 const SMOOTHING = 4.5;
 const MAX_DELTA = 1 / 30;
@@ -237,7 +238,7 @@ function relativeToFloor(box: Box): Box {
   return { center: [box.center[0], box.center[1] - FLOOR, box.center[2]], size: box.size };
 }
 
-function Villa({ progress, reducedMotion }: SceneProps) {
+function Villa({ progress, snapRef, reducedMotion }: SceneProps) {
   const { invalidate, size } = useThree();
   const smooth = useRef(reducedMotion ? 1 : (progress.current ?? 0));
 
@@ -329,6 +330,10 @@ function Villa({ progress, reducedMotion }: SceneProps) {
 
   useFrame((state, rawDelta) => {
     const goal = reducedMotion ? 1 : (progress.current ?? 0);
+    if (snapRef.current) {
+      smooth.current = goal;
+      snapRef.current = false;
+    }
     smooth.current = MathUtils.damp(smooth.current, goal, SMOOTHING, Math.min(rawDelta, MAX_DELTA));
     if (Math.abs(smooth.current - goal) < 0.0004) smooth.current = goal;
     else invalidate(); // encara s'assenta: demanem un altre fotograma
@@ -371,7 +376,8 @@ function Villa({ progress, reducedMotion }: SceneProps) {
     tmpColor.copy(PAPER).lerp(EARTH, paper).multiplyScalar(1 - dusk * 0.18);
     groundMat.current?.color.copy(tmpColor);
     lidMat.current?.color.copy(tmpColor);
-    if (planMat.current) planMat.current.opacity = easeOutCubic(s(p, "plan")) * (1 - easeInOut(segment(p, [0.42, 0.56])));
+    // El plànol ja es veu d'entrada (si no, l'escena comença en blanc) i acaba de dibuixar-se en baixar.
+    if (planMat.current) planMat.current.opacity = (0.4 + 0.6 * easeOutCubic(s(p, "plan"))) * (1 - easeInOut(segment(p, [0.42, 0.56])));
     if (ghostMat.current) ghostMat.current.opacity = ghostAt(p) * 0.9;
 
     // 02 · Fonaments: s'obre el forat de la piscina i puja la llosa.

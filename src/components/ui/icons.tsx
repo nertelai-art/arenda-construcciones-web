@@ -108,3 +108,10 @@ export const ChevronDown = ({ className }: IconProps) => (
     <path d="m6 9.5 6 6 6-6" />
   </svg>
 );
+
+export const Replay = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+    <path d="M4.5 4.5v4h4" />
+  </svg>
+);

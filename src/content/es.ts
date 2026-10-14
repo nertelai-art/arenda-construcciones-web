@@ -76,6 +76,7 @@ export const es: Dictionary = {
     sr: "Animación: una villa mediterránea se construye capa a capa, desde el plano dibujado en el suelo hasta la piscina llena y las luces encendidas al atardecer.",
     staticAlt: "Villa terminada con piscina, el tipo de casa que construimos.",
     stepLabel: "Paso",
+    replay: "Vuelve a ver cómo se construye",
   },
   renovation: {
     kicker: "Reformas",
@@ -93,6 +94,7 @@ export const es: Dictionary = {
     resultText: "La ilustración se inspira en este baño, reformado por el equipo. El estado de antes es genérico.",
     sr: "Animación: los azulejos viejos de un baño saltan, aparecen las tuberías nuevas dentro de las paredes, se extiende el microcemento y se colocan el mueble, los lavabos, la mampara y el espejo iluminado.",
     stepLabel: "Paso",
+    replay: "Vuelve a ver la reforma",
   },
   remote: {
     kicker: "Cómo trabajamos",

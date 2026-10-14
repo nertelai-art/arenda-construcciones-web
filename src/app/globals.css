@@ -369,6 +369,12 @@ ol {
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Només les fotos i els traços es destapen amb un retall. Si fos per a tot, el retall tallaria el
+   que sobresurt d'un element (les lletres A, B i C de «Bo de saber» quedaven tallades per la meitat). */
+.js [data-reveal="wipe"].is-visible,
+.js [data-reveal="stroke"].is-visible {
   clip-path: inset(0 0 0 0);
 }
 
@@ -392,5 +398,43 @@ ol {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Escenes acabades ------------------------------------------------------------------------------
+ * Una escena vista fins al final s'hi queda i, quan el scroll s'atura, ocupa una sola pantalla amb
+ * l'últim fotograma (`data-done`, el posa scroll-scene.ts). Llavors apareix el botó per tornar-la a
+ * veure, que la torna a fer alta i porta al principi.
+ */
+.scene-replay {
+  display: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0.75;
+  transition: opacity 0.2s, transform 0.4s var(--ease-out);
+}
+
+.scene-replay:hover {
+  opacity: 1;
+  transform: rotate(-40deg);
+}
+
+.scene-replay svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-done] .scene-replay {
+    display: inline-grid;
   }
 }

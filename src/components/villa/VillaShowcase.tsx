@@ -9,6 +9,7 @@ import { useRef } from "react";
 import type { Dictionary } from "@/content";
 import { photos } from "@/content/photos";
 import { useNearViewport, useReducedMotion, useRenderMode, useScrollProgress } from "../scroll/scroll-scene";
+import { SceneReplay } from "../scroll/SceneReplay";
 import { Brush } from "../ui/Brush";
 import { duskAt, paperToGroundAt, stepAt } from "./villa-phases";
 import styles from "./VillaShowcase.module.css";
@@ -29,7 +30,7 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
   const last = t.steps.length - 1;
 
   // Pas actiu, comptador, barra i cel: directament al DOM, mai amb setState (canvia a cada píxel).
-  const progress = useScrollProgress(section, (raw) => {
+  const { progress, snap, replay } = useScrollProgress(section, stage, (raw) => {
     const value = reducedMotion ? 1 : raw;
     const active = stepAt(value);
     const items = steps.current?.children ?? [];
@@ -61,7 +62,7 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
 
         {mode === "3d" && near && (
           <div className={styles.canvas}>
-            <VillaScene progress={progress} reducedMotion={reducedMotion} />
+            <VillaScene progress={progress} snapRef={snap} reducedMotion={reducedMotion} />
           </div>
         )}
 
@@ -74,7 +75,10 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
         <div className={`container ${styles.content}`}>
           <div className={styles.copy}>
             <header className={styles.head}>
-              <p className="kicker">{t.kicker}</p>
+              <div className={styles.kickerRow}>
+                <p className="kicker">{t.kicker}</p>
+                <SceneReplay label={t.replay} onClick={replay} />
+              </div>
               <h2 id="obra-nova-titol" className={styles.title}>
                 {t.title}
               </h2>

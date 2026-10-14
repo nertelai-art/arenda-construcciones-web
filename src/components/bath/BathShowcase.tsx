@@ -8,6 +8,7 @@ import { useRef } from "react";
 import type { Dictionary } from "@/content";
 import { photos } from "@/content/photos";
 import { useNearViewport, useReducedMotion, useRenderMode, useScrollProgress } from "../scroll/scroll-scene";
+import { SceneReplay } from "../scroll/SceneReplay";
 import { Brush } from "../ui/Brush";
 import { glowAt, stepAt } from "./bath-phases";
 import styles from "./BathShowcase.module.css";
@@ -27,7 +28,7 @@ export function BathShowcase({ t }: { t: Dictionary["renovation"] }) {
   const near = useNearViewport(track, "1500px", 3500);
   const last = t.steps.length - 1;
 
-  const progress = useScrollProgress(track, (raw) => {
+  const { progress, snap, replay } = useScrollProgress(track, stage, (raw) => {
     const value = reducedMotion ? 1 : raw;
     const active = stepAt(value);
     const items = steps.current?.children ?? [];
@@ -50,7 +51,7 @@ export function BathShowcase({ t }: { t: Dictionary["renovation"] }) {
           <div className={styles.light} aria-hidden="true" />
           {mode === "3d" && near && (
             <div className={styles.canvas}>
-              <BathScene progress={progress} reducedMotion={reducedMotion} />
+              <BathScene progress={progress} snapRef={snap} reducedMotion={reducedMotion} />
             </div>
           )}
 
@@ -59,7 +60,10 @@ export function BathShowcase({ t }: { t: Dictionary["renovation"] }) {
           <div className={`container ${styles.content}`}>
             <div className={styles.copy}>
               <header className={styles.head}>
-                <p className="kicker">{t.kicker}</p>
+                <div className={styles.kickerRow}>
+                  <p className="kicker">{t.kicker}</p>
+                  <SceneReplay label={t.replay} onClick={replay} />
+                </div>
                 <h2 id="reformes-titol" className={styles.title}>
                   {t.title}
                 </h2>

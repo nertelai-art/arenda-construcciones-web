@@ -378,3 +378,20 @@
   box-shadow: none;
   backdrop-filter: none;
 }
+
+/* Escena vista fins al final: es queda a l'últim fotograma i ocupa una sola pantalla
+   (`data-done`, el posa scroll-scene.ts quan el scroll s'atura). Apareix el botó de tornar-la a veure. */
+.kickerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section[data-done] {
+  height: auto;
+}
+
+.section[data-done] .stage {
+  position: relative;
+}

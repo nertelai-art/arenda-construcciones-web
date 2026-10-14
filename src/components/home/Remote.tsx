@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { maxProgress } from "@/lib/scene-progress";
 import type { Dictionary } from "@/content";
 import { useViewportProgress } from "../scroll/scroll-scene";
 import { Brush } from "../ui/Brush";
@@ -12,9 +13,14 @@ import styles from "./Remote.module.css";
  */
 export function Remote({ t }: { t: Dictionary["remote"] }) {
   const track = useRef<HTMLOListElement>(null);
-  useViewportProgress(track, (value) => {
+  const painted = useRef(0);
+  useViewportProgress(track, (raw) => {
     const element = track.current;
     if (!element) return;
+    // El que ja s'ha pintat es queda: tornar a pujar no buida la línia.
+    const value = maxProgress(raw, painted.current);
+    if (value === painted.current && value > 0) return;
+    painted.current = value;
     element.style.setProperty("--fill", value.toFixed(4));
     const items = element.children;
     for (let index = 0; index < items.length; index++) {

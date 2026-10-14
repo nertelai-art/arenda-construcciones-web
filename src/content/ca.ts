@@ -79,6 +79,7 @@ export const ca = {
     sr: "Animació: una vila mediterrània es construeix capa a capa, des del plànol dibuixat a terra fins a la piscina plena i els llums encesos al capvespre.",
     staticAlt: "Vila acabada amb piscina, la mena de casa que construïm.",
     stepLabel: "Pas",
+    replay: "Torna a veure com es construeix",
   },
   renovation: {
     kicker: "Reformes",
@@ -96,6 +97,7 @@ export const ca = {
     resultText: "La il·lustració s'inspira en aquest bany, reformat per l'equip. L'estat d'abans és genèric.",
     sr: "Animació: les rajoles velles d'un bany salten, apareixen les canonades noves dins les parets, s'estén el microciment i s'hi col·loquen el moble, les piques, la mampara i el mirall il·luminat.",
     stepLabel: "Pas",
+    replay: "Torna a veure la reforma",
   },
   remote: {
     kicker: "Com treballem",

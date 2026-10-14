@@ -29,6 +29,7 @@
 .steps::after {
   content: "";
   position: absolute;
+  z-index: 0;
   left: 23px;
   top: 10px;
   bottom: 10px;
@@ -46,8 +47,10 @@
   transform-origin: top;
 }
 
+/* Cada pas, per sobre de la línia: el número sempre la tapa a ella, mai al revés. */
 .steps li {
   position: relative;
+  z-index: 1;
   max-width: 46ch;
 }
 
@@ -86,12 +89,20 @@
   color: var(--ink-soft);
 }
 
-.steps li[data-reached="false"] {
+/* Els passos que encara no s'han assolit, més apagats. Només el text: si fos tot el pas, el número
+   seria transparent i la línia es veuria a través seu. */
+.steps li h3,
+.steps li p {
+  transition: opacity 0.5s;
+}
+
+.steps li[data-reached="false"] h3,
+.steps li[data-reached="false"] p {
   opacity: 0.55;
 }
 
-.steps li {
-  transition: opacity 0.5s;
+.steps li[data-reached="false"] .dot {
+  color: rgb(36 30 31 / 0.55);
 }
 
 .includedHead {

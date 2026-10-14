@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
+import { heldProgress, sceneProgress } from "@/lib/scene-progress";
 
 // Peces comunes de les escenes guiades pel scroll (copiat de la skill scroll-3d-scenes).
 
@@ -82,34 +83,150 @@ function whenIdle(delay: number, callback: () => void) {
   };
 }
 
-/**
- * Progrés (0-1) del scroll dins d'una secció alta amb contingut sticky. Es guarda en una ref i no
- * en estat: canvia a cada píxel i no volem re-renderitzar React. `onChange` permet tocar el DOM.
+/*
+ * Escenes altes amb contingut enganxós (la vila i el bany). Un sol escoltador de scroll i un sol
+ * fotograma per a totes: primer es llegeixen les posicions i després s'escriu.
+ *
+ * Una escena que ja s'ha vist fins al final s'hi queda (`heldProgress`): tornar a pujar no la
+ * rebobina. Quan el scroll fa una estona que s'ha aturat, la secció deixa de ser alta i ocupa una
+ * sola pantalla amb l'últim fotograma (`data-done`), perquè pujar no sigui recórrer pantalles on
+ * no passa res; el scroll es compensa perquè el que hi ha a la vista no es mogui. `replay` la torna
+ * a deixar com al principi. Mateix criteri que a culleramotor.
  */
-export function useScrollProgress(ref: RefObject<HTMLElement | null>, onChange?: (progress: number) => void) {
+type Scene = {
+  element: () => HTMLElement | null;
+  sticky: () => HTMLElement | null;
+  onProgress: (progress: number, done: boolean) => void;
+  last: number;
+  done: boolean;
+  collapsed: boolean;
+};
+
+const scenes = new Set<Scene>();
+let frame = 0;
+let idleTimer = 0;
+/** Quanta estona sense scroll vol dir que s'ha aturat, en mil·lisegons. */
+const SCROLL_IDLE = 180;
+
+function flush() {
+  frame = 0;
+  const viewport = window.innerHeight;
+  const changed: [Scene, number][] = [];
+  for (const scene of scenes) {
+    const element = scene.element();
+    if (!element) continue;
+    const rect = element.getBoundingClientRect();
+    const sticky = scene.collapsed ? 0 : (scene.sticky()?.offsetHeight ?? 0);
+    const held = heldProgress(sceneProgress({ top: rect.top, height: rect.height, sticky, viewport }), scene.done);
+    if (held.done && !scene.done) {
+      scene.done = true;
+      armCollapse();
+    }
+    if (held.progress !== scene.last) changed.push([scene, held.progress]);
+  }
+  for (const [scene, progress] of changed) {
+    scene.last = progress;
+    scene.onProgress(progress, scene.done);
+  }
+}
+
+function schedule() {
+  // Una pestanya amagada no rep fotogrames: es calcula al moment, perquè en tornar-hi tot sigui al seu lloc.
+  if (document.visibilityState === "hidden") flush();
+  else if (!frame) frame = requestAnimationFrame(flush);
+}
+
+/** Les escenes acabades es pleguen quan el scroll fa una estona que s'ha aturat, no a mig gest. */
+function armCollapse() {
+  window.clearTimeout(idleTimer);
+  idleTimer = window.setTimeout(collapse, SCROLL_IDLE);
+}
+
+function collapse() {
+  idleTimer = 0;
+  for (const scene of scenes) {
+    if (!scene.done || scene.collapsed) continue;
+    const section = scene.element();
+    const stage = scene.sticky();
+    if (!section || !stage) continue;
+    const before = stage.getBoundingClientRect().top;
+    section.closest("section")?.setAttribute("data-done", "");
+    scene.collapsed = true;
+    const shift = stage.getBoundingClientRect().top - before;
+    if (shift !== 0) window.scrollBy({ top: shift, behavior: "instant" });
+  }
+}
+
+function onScroll() {
+  schedule();
+  if (idleTimer) armCollapse();
+}
+
+function addScene(scene: Scene) {
+  if (scenes.size === 0) {
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", schedule);
+  }
+  scenes.add(scene);
+  schedule();
+  return () => {
+    scenes.delete(scene);
+    if (scenes.size === 0) {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", schedule);
+    }
+  };
+}
+
+function replayScene(scene: Scene) {
+  const section = scene.element();
+  if (!section) return;
+  section.closest("section")?.removeAttribute("data-done");
+  scene.done = false;
+  scene.collapsed = false;
+  scene.last = Number.NaN;
+  window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY, behavior: "instant" });
+  schedule();
+}
+
+/**
+ * Progrés (0-1) del scroll dins d'una secció alta (`ref`) amb contingut enganxós (`sticky`). Es
+ * guarda en una ref i no en estat: canvia a cada píxel i no volem re-renderitzar React.
+ * `onChange` rep el progrés i si l'escena ja s'ha acabat, i toca el DOM directament.
+ *
+ * - `progress`: el progrés actual, que llegeix l'escena 3D a cada fotograma.
+ * - `snap`: es posa a `true` en tornar a començar, perquè l'escena hi salti en lloc de rebobinar.
+ * - `replay`: porta al principi i deixa l'escena sense acabar, per tornar-la a veure.
+ */
+export function useScrollProgress(ref: RefObject<HTMLElement | null>, sticky: RefObject<HTMLElement | null>, onChange?: (progress: number, done: boolean) => void) {
   const progress = useRef(0);
+  const snap = useRef(false);
   const callback = useRef(onChange);
+  const scene = useRef<Scene | null>(null);
   useEffect(() => {
     callback.current = onChange;
   });
   useEffect(() => {
-    const update = () => {
-      const element = ref.current;
-      if (!element) return;
-      const rect = element.getBoundingClientRect();
-      const distance = rect.height - window.innerHeight;
-      progress.current = distance > 0 ? Math.min(1, Math.max(0, -rect.top / distance)) : 1;
-      callback.current?.(progress.current);
+    const current: Scene = {
+      element: () => ref.current,
+      sticky: () => sticky.current,
+      last: Number.NaN,
+      done: false,
+      collapsed: false,
+      onProgress: (value, done) => {
+        progress.current = value;
+        callback.current?.(value, done);
+      },
     };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, [ref]);
-  return progress;
+    scene.current = current;
+    return addScene(current);
+  }, [ref, sticky]);
+  const replay = useCallback(() => {
+    if (!scene.current) return;
+    snap.current = true;
+    replayScene(scene.current);
+  }, []);
+  return { progress, snap, replay };
 }
 
 /**

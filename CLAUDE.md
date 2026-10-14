@@ -56,6 +56,15 @@ del showroom) al text. Les seccions fosques entren amb el perfil d'una teulada a
 - Escenes: `frameloop="demand"`, progrés en una ref, zero objectes nous per fotograma, res de
   `setState` al scroll, sense mapa d'entorn. Els materials que s'encenen al capvespre són de
   mòdul (es modifiquen a cada fotograma i React no els ha de veure com a seus).
+- **Una escena vista fins al final s'hi queda** (com a culleramotor): tornar a pujar no la rebobina
+  (`heldProgress`, a `src/lib/scene-progress.ts`). Quan el scroll s'atura, la secció es plega a una
+  pantalla amb l'últim fotograma (`data-done`) i es compensa el scroll perquè no es mogui res de la
+  vista. El botó del costat de l'etiqueta (`SceneReplay`) la desplega i porta al principi. La línia
+  de «Com treballem» tampoc no es despinta. La galeria d'obres sí que va i torna: és per mirar fotos.
+- El progrés es mesura contra el contingut enganxós (100svh), no contra `innerHeight`, i a menys
+  d'un píxel del final ja és el final (la secció pot començar a mig píxel).
+- Els revelats només retallen (`clip-path`) les fotos i els traços: un retall a tot tallava el que
+  sobresurt dels elements (les lletres A, B i C de «Bo de saber»).
 - La càmera de la vila no baixa de 0,38 rad d'elevació: així l'horitzó no surt mai a pla i no cal
   casar el terra amb el cel CSS. Ho vigila una prova.
 - Sense proveïdor d'enviament, el formulari **prepara un correu** (`mailto:`) amb tot escrit.

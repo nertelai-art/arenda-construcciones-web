@@ -30,7 +30,8 @@ import { bareWallTexture, microcementTexture, oakTexture, oldFloorTexture, oldTi
 import type { Polyline } from "../villa/villa-geometry";
 import { BEATS, cameraAt, glowAt } from "./bath-phases";
 
-export type SceneProps = { progress: RefObject<number>; reducedMotion: boolean };
+/** `snapRef`: quan és `true`, l'escena salta al progrés actual en lloc d'anar-hi suaument (en tornar-la a veure). */
+export type SceneProps = { progress: RefObject<number>; snapRef: RefObject<boolean>; reducedMotion: boolean };
 
 const SMOOTHING = 4.5;
 const MAX_DELTA = 1 / 30;
@@ -143,7 +144,7 @@ function basinGeometry() {
   return new LatheGeometry(points, 28);
 }
 
-function Bath({ progress, reducedMotion }: SceneProps) {
+function Bath({ progress, snapRef, reducedMotion }: SceneProps) {
   const { invalidate, size } = useThree();
   const smooth = useRef(reducedMotion ? 1 : (progress.current ?? 0));
 
@@ -189,6 +190,10 @@ function Bath({ progress, reducedMotion }: SceneProps) {
 
   useFrame((state, rawDelta) => {
     const goal = reducedMotion ? 1 : (progress.current ?? 0);
+    if (snapRef.current) {
+      smooth.current = goal;
+      snapRef.current = false;
+    }
     smooth.current = MathUtils.damp(smooth.current, goal, SMOOTHING, Math.min(rawDelta, MAX_DELTA));
     if (Math.abs(smooth.current - goal) < 0.0004) smooth.current = goal;
     else invalidate();
