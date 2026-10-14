@@ -29,6 +29,16 @@
   min-height: 100svh;
 }
 
+/* Sense WebGL només hi ha els passos: la foto del bany acabat ve just després. */
+.section[data-compact] .stage {
+  min-height: 0;
+}
+
+.section[data-compact] .copy {
+  height: auto;
+  max-width: 640px;
+}
+
 /* Un focus suau darrere del bany, que s'escalfa quan s'encén el mirall. */
 .light {
   position: absolute;
@@ -263,4 +273,12 @@
   .footer {
     bottom: 92px;
   }
+}
+
+/* Sense WebGL no hi ha recorregut: tots els passos es llegeixen igual. */
+.section[data-compact] .steps > li {
+  opacity: 1;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }

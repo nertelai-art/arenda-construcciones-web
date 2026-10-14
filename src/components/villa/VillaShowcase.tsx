@@ -71,12 +71,6 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
           <span className={styles.scrimDark} />
         </div>
 
-        {compact && (
-          <div className={styles.fallback}>
-            <Image src={photos.villaPool.src} alt={t.staticAlt} fill sizes="100vw" className={styles.fallbackPhoto} />
-          </div>
-        )}
-
         <div className={`container ${styles.content}`}>
           <div className={styles.copy}>
             <header className={styles.head}>
@@ -112,6 +106,13 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
             </ol>
           </div>
         </div>
+
+        {/* Sense WebGL: la foto d'una vila acabada, després dels passos. */}
+        {compact && (
+          <div className={`container ${styles.fallback}`}>
+            <Image src={photos.villaPool.src} alt={t.staticAlt} width={photos.villaPool.width} height={photos.villaPool.height} sizes="100vw" className={styles.fallbackPhoto} />
+          </div>
+        )}
 
         <div className={styles.footer} aria-hidden="true">
           <span className={styles.count}>

@@ -91,12 +91,17 @@
 
 .fallback {
   position: relative;
-  height: 60vh;
-  margin-top: 40px;
+  padding-bottom: clamp(64px, 8vw, 120px);
 }
 
 .fallbackPhoto {
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.section[data-compact] .stage {
+  min-height: 0;
 }
 
 .content {
@@ -364,4 +369,12 @@
   .footer {
     bottom: 92px;
   }
+}
+
+/* Sense WebGL no hi ha recorregut: tots els passos es llegeixen igual. */
+.section[data-compact] .steps > li {
+  opacity: 1;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
 }
