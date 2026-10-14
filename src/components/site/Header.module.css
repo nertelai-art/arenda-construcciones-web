@@ -106,34 +106,6 @@
   gap: 16px;
 }
 
-.languages ul {
-  display: flex;
-  gap: 2px;
-}
-
-.languages a {
-  display: grid;
-  place-items: center;
-  min-width: 34px;
-  height: 34px;
-  border-radius: var(--radius);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  opacity: 0.66;
-  transition: opacity 0.2s, background-color 0.2s;
-}
-
-.languages a:hover {
-  opacity: 1;
-}
-
-.languages a[aria-current="page"] {
-  opacity: 1;
-  box-shadow: inset 0 -3px 0 var(--vermell);
-}
-
 .cta {
   min-height: 44px;
   padding-inline: 20px;
@@ -197,10 +169,6 @@
   margin-block: 28px;
 }
 
-.panelLanguages {
-  margin-top: 28px;
-}
-
 /* Amb el menú obert, la capçalera és sòlida i fosca com el panell. */
 .header[data-open] {
   color: var(--on-dark);
@@ -235,8 +203,11 @@
     width: 112px;
   }
 
-  .tools .cta,
-  .tools > .languages {
+  .tools .cta {
     display: none;
+  }
+
+  .tools {
+    gap: 8px;
   }
 }

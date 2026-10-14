@@ -95,3 +95,16 @@ export const Facebook = ({ className }: IconProps) => (
     <path d="M14 8.5h2.5V5H14a3.5 3.5 0 0 0-3.5 3.5V11H8v3.5h2.5V21H14v-6.5h2.5L17 11h-3V9a.5.5 0 0 1 .5-.5Z" />
   </svg>
 );
+
+export const Globe = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M3.5 12h17M12 3.5c2.4 2.4 3.6 5.2 3.6 8.5s-1.2 6.1-3.6 8.5c-2.4-2.4-3.6-5.2-3.6-8.5s1.2-6.1 3.6-8.5Z" />
+  </svg>
+);
+
+export const ChevronDown = ({ className }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="m6 9.5 6 6 6-6" />
+  </svg>
+);

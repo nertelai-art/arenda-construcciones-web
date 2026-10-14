@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/content";
-import { alternatePath, homeAnchor, homePath, locales, type Locale } from "@/lib/i18n";
+import { homeAnchor, homePath, type Locale } from "@/lib/i18n";
 import { Brush } from "../ui/Brush";
 import { Close, Menu } from "../ui/icons";
 import styles from "./Header.module.css";
+import { LanguageMenu } from "./LanguageMenu";
 import { Logo } from "./Logo";
 
 type Props = { locale: Locale; t: Dictionary["nav"] };
@@ -42,7 +43,8 @@ export function Header({ locale, t }: Props) {
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && close();
+    // Si l'Esc ja l'ha fet servir el desplegable d'idioma, el menú queda obert.
+    const onKey = (event: KeyboardEvent) => event.key === "Escape" && !event.defaultPrevented && close();
     document.addEventListener("keydown", onKey);
     document.documentElement.dataset.menu = "open";
     return () => {
@@ -71,7 +73,7 @@ export function Header({ locale, t }: Props) {
         </nav>
 
         <div className={styles.tools}>
-          <LanguageSwitch locale={locale} pathname={pathname} label={t.language} />
+          <LanguageMenu locale={locale} pathname={pathname} label={t.language} />
           <a href={anchor("#contacte")} className={`btn ${styles.cta}`}>
             {t.cta}
           </a>
@@ -97,28 +99,8 @@ export function Header({ locale, t }: Props) {
           <a href={anchor("#contacte")} className="btn" onClick={close}>
             {t.cta}
           </a>
-          <LanguageSwitch locale={locale} pathname={pathname} label={t.language} className={styles.panelLanguages} />
         </nav>
       </div>
     </header>
-  );
-}
-
-const names: Record<Locale, string> = { ca: "Català", es: "Español", en: "English" };
-
-function LanguageSwitch({ locale, pathname, label, className }: { locale: Locale; pathname: string; label: string; className?: string }) {
-  return (
-    <nav aria-label={label} className={`${styles.languages} ${className ?? ""}`}>
-      <ul>
-        {locales.map((code) => (
-          <li key={code}>
-            <Link href={alternatePath(pathname, code)} hrefLang={code} lang={code} aria-current={code === locale ? "page" : undefined} title={names[code]}>
-              {code.toUpperCase()}
-              <span className="sr-only"> · {names[code]}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
   );
 }
