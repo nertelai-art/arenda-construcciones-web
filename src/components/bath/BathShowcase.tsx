@@ -24,7 +24,7 @@ export function BathShowcase({ t }: { t: Dictionary["renovation"] }) {
   const bar = useRef<HTMLSpanElement>(null);
   const mode = useRenderMode();
   const reducedMotion = useReducedMotion();
-  const near = useNearViewport(track);
+  const near = useNearViewport(track, "1500px", 3500);
   const last = t.steps.length - 1;
 
   const progress = useScrollProgress(track, (raw) => {

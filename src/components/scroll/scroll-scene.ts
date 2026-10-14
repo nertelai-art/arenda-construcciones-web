@@ -35,7 +35,7 @@ export function useReducedMotion() {
 }
 
 /** Es torna `true` (per sempre) quan l'element és a menys de `margin` de la pantalla. */
-export function useNearViewport(ref: RefObject<HTMLElement | null>, margin = "1500px") {
+export function useNearViewport(ref: RefObject<HTMLElement | null>, margin = "1500px", idleAfter?: number) {
   const [near, setNear] = useState(false);
   useEffect(() => {
     const element = ref.current;
@@ -50,9 +50,36 @@ export function useNearViewport(ref: RefObject<HTMLElement | null>, margin = "15
       { rootMargin: `${margin} 0px` },
     );
     observer.observe(element);
-    return () => observer.disconnect();
-  }, [ref, margin]);
+    const cancelIdle = idleAfter === undefined ? undefined : whenIdle(idleAfter, () => setNear(true));
+    return () => {
+      observer.disconnect();
+      cancelIdle?.();
+    };
+  }, [ref, margin, idleAfter]);
   return near;
+}
+
+/**
+ * Crida `callback` quan el navegador està ociós, passats `delay` ms des de la càrrega. Muntar una
+ * escena 3D costa uns quants centenars de mil·lisegons (three.js, textures, GPU): millor pagar-ho
+ * mentre es llegeix la capçalera que no a batzegades en ple scroll. Amb «estalvi de dades» o
+ * menys de 4 nuclis no es fa: s'espera que la secció sigui a prop.
+ */
+function whenIdle(delay: number, callback: () => void) {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  if (connection?.saveData || (navigator.hardwareConcurrency ?? 0) < 4 || typeof window.requestIdleCallback !== "function") return undefined;
+  let idle = 0;
+  const start = () => {
+    timer = window.setTimeout(() => (idle = window.requestIdleCallback(callback, { timeout: 4000 })), delay);
+  };
+  let timer = 0;
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start, { once: true });
+  return () => {
+    window.removeEventListener("load", start);
+    window.clearTimeout(timer);
+    if (idle) window.cancelIdleCallback(idle);
+  };
 }
 
 /**

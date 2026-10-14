@@ -25,7 +25,7 @@ export function VillaShowcase({ t }: { t: Dictionary["anatomy"] }) {
   const bar = useRef<HTMLSpanElement>(null);
   const mode = useRenderMode();
   const reducedMotion = useReducedMotion();
-  const near = useNearViewport(section);
+  const near = useNearViewport(section, "1500px", 1200);
   const last = t.steps.length - 1;
 
   // Pas actiu, comptador, barra i cel: directament al DOM, mai amb setState (canvia a cada píxel).
