@@ -1,0 +1,45 @@
+{
+  "name": "arenda-construcciones-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "build:local": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "images": "node scripts/prepare-images.mjs",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "dependencies": {
+    "@react-three/drei": "10.7.9",
+    "@react-three/fiber": "9.8.1",
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.186.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.0",
+    "sharp": "0.35.5",
+    "typescript": "6.0.3",
+    "vitest": "5.0.4"
+  },
+  "//": [
+    "typescript@6 i eslint@9 a posta: typescript-eslint 8.71 demana TS <6.1 i eslint-plugin-react 7.37 no arriba a ESLint 10 (comprovat al registre el 2026-10-14).",
+    "Node 24, l'LTS més nou, com a culleramotor. @types/node va amb el Node que s'executa: 24."
+  ]
+}

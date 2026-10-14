@@ -1,0 +1,288 @@
+.section {
+  overflow: clip;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.intro {
+  display: grid;
+  gap: 18px;
+}
+
+.brush {
+  width: 150px;
+  height: 14px;
+}
+
+.direct {
+  margin-top: 26px;
+}
+
+.directTitle {
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--on-dark-soft);
+  margin-bottom: 8px;
+}
+
+.direct ul {
+  display: grid;
+}
+
+.direct li {
+  display: grid;
+  grid-template-columns: 22px 110px 1fr;
+  align-items: start;
+  gap: 14px;
+  padding-block: 14px;
+  border-bottom: 1px solid var(--linia-dark);
+}
+
+.direct li > svg {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--groc);
+}
+
+.direct li > span {
+  font-size: 0.85rem;
+  color: var(--on-dark-soft);
+  padding-top: 1px;
+}
+
+.direct a {
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.direct a:hover {
+  color: var(--groc);
+}
+
+.direct small {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--groc);
+  margin-top: 2px;
+}
+
+.direct li p {
+  display: grid;
+  font-weight: 600;
+}
+
+/* El formulari, en una placa clara damunt del fons fosc. */
+.form {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  padding: clamp(24px, 4vw, 48px);
+  border-radius: var(--radius);
+  background: var(--calc);
+  color: var(--ink);
+  color-scheme: light;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.35);
+}
+
+.form::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 6px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: linear-gradient(90deg, #006eb8 0 33%, #f6a040 33% 66%, #e72426 66%);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.field label,
+.types legend {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.field input:not([type="checkbox"]),
+.field textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--pedra-2);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: #b9ad9c;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-color: var(--blau);
+  box-shadow: 0 0 0 3px rgb(11 98 173 / 0.2);
+}
+
+.field [aria-invalid="true"] {
+  border-color: var(--vermell) !important;
+  box-shadow: 0 0 0 3px rgb(212 33 38 / 0.14) !important;
+}
+
+.error {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--vermell-fosc);
+}
+
+.summary {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: rgb(212 33 38 / 0.08);
+  color: var(--vermell-fosc);
+  font-weight: 700;
+}
+
+.types {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.types > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--pedra-2);
+  background: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.chip:hover span {
+  border-color: #b9ad9c;
+}
+
+.chip input:checked + span {
+  background: var(--antracita);
+  border-color: var(--antracita);
+  color: #fff;
+}
+
+.chip input:focus-visible + span {
+  outline: 3px solid var(--blau-clar);
+  outline-offset: 2px;
+}
+
+.check {
+  display: flex !important;
+  gap: 12px;
+  align-items: flex-start;
+  font-weight: 400 !important;
+  font-size: 0.92rem !important;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex: none;
+  accent-color: var(--vermell);
+}
+
+.check a {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.submit {
+  justify-self: start;
+}
+
+.note {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.opened {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: rgb(11 98 173 / 0.08);
+  color: var(--blau-fosc);
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .direct li {
+    grid-template-columns: 22px 1fr;
+  }
+
+  .direct li > span {
+    display: none;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}

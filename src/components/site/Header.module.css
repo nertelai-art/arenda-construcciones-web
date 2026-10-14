@@ -1,0 +1,242 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  color: var(--on-dark);
+  transition: background-color 0.35s, color 0.35s, box-shadow 0.35s;
+}
+
+/* Sobre la foto: una ombra suau perquè el menú es llegeixi sobre el cel. */
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -40px;
+  z-index: -1;
+  background: linear-gradient(rgb(28 23 24 / 0.55), rgb(28 23 24 / 0));
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+
+.header[data-solid="true"] {
+  color: var(--ink);
+  background: rgb(251 250 247 / 0.92);
+  backdrop-filter: saturate(1.4) blur(14px);
+  box-shadow: 0 1px 0 var(--linia);
+}
+
+.header[data-solid="true"]::before {
+  opacity: 0;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: var(--header-h);
+}
+
+.brand {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 138px;
+  height: 62px;
+}
+
+.brand img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  transition: opacity 0.35s;
+}
+
+.logoLight {
+  opacity: 0;
+}
+
+.header[data-solid="true"] .logoLight {
+  opacity: 1;
+}
+
+.header[data-solid="true"] .logoDark {
+  opacity: 0;
+}
+
+.nav {
+  margin-left: auto;
+}
+
+.nav ul {
+  display: flex;
+  gap: clamp(14px, 1.6vw, 28px);
+}
+
+.nav a {
+  position: relative;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding-block: 8px;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 3px 1px;
+  background: var(--brush-vermell);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.languages ul {
+  display: flex;
+  gap: 2px;
+}
+
+.languages a {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  opacity: 0.66;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.languages a:hover {
+  opacity: 1;
+}
+
+.languages a[aria-current="page"] {
+  opacity: 1;
+  box-shadow: inset 0 -3px 0 var(--vermell);
+}
+
+.cta {
+  min-height: 44px;
+  padding-inline: 20px;
+  font-size: 0.92rem;
+}
+
+.menuButton {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  cursor: pointer;
+}
+
+.menuButton svg {
+  width: 26px;
+  height: 26px;
+}
+
+.panel {
+  position: fixed;
+  inset: var(--header-h) 0 0;
+  overflow-y: auto;
+  padding-block: 32px 48px;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panelList {
+  display: grid;
+  gap: 6px;
+}
+
+.panelList a {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  padding-block: 4px;
+  animation: menu-in 0.5s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+}
+
+.panelBrush {
+  width: 180px;
+  height: 18px;
+  margin-block: 28px;
+}
+
+.panelLanguages {
+  margin-top: 28px;
+}
+
+/* Amb el menú obert, la capçalera és sòlida i fosca com el panell. */
+.header[data-open] {
+  color: var(--on-dark);
+  background: var(--antracita);
+  backdrop-filter: none;
+}
+
+.header[data-open] .logoLight {
+  opacity: 0;
+}
+
+.header[data-open] .logoDark {
+  opacity: 1;
+}
+
+@media (max-width: 1180px) {
+  .nav {
+    display: none;
+  }
+
+  .tools {
+    margin-left: auto;
+  }
+
+  .menuButton {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand {
+    width: 112px;
+  }
+
+  .tools .cta,
+  .tools > .languages {
+    display: none;
+  }
+}

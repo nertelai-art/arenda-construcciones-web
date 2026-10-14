@@ -1,0 +1,29 @@
+name: CI
+
+# Les portes barates (typecheck, lint, tests, secrets) van al hook de pre-push.
+# Aquí només el que no es pot fer de fiar en local: la build de producció.
+on:
+  pull_request:
+  push:
+    branches: [developer]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build

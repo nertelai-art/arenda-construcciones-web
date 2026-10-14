@@ -1,0 +1,12 @@
+#!/bin/sh
+# Portes barates en local (regles de casa): typecheck, lint (inclou la regla
+# de dependències), tests i cerca de secrets. A CI només hi va la build.
+set -e
+echo "▸ typecheck"; pnpm -s typecheck
+echo "▸ lint"; pnpm -s lint
+echo "▸ tests"; pnpm -s test
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "▸ gitleaks"; gitleaks git --no-banner --redact .
+else
+  echo "⚠ gitleaks no està instal·lat: s'omet la cerca de secrets."
+fi

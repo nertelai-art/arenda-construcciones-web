@@ -1,0 +1,6 @@
+# pnpm no executa els scripts d'instal·lació de cap dependència sense permís explícit.
+# sharp i unrs-resolver: el postinstall només comprova el binari natiu, que ja ve per
+# optionalDependencies. Es neguen a posta perquè pnpm no avisi a cada instal·lació.
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

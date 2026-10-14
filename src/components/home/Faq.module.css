@@ -1,0 +1,88 @@
+.section {
+  background: var(--calc);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(36px, 6vw, 96px);
+  align-items: start;
+}
+
+.head {
+  position: sticky;
+  top: calc(var(--header-h) + 40px);
+  display: grid;
+  gap: 18px;
+}
+
+.list {
+  border-top: 2px solid var(--antracita);
+}
+
+.item {
+  border-bottom: 1px solid var(--linia);
+}
+
+.item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 24px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  transition: color 0.2s;
+}
+
+.item summary::-webkit-details-marker {
+  display: none;
+}
+
+.item summary:hover {
+  color: var(--vermell-fosc);
+}
+
+.item summary svg {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  color: var(--vermell);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.item[open] summary svg {
+  transform: rotate(135deg);
+}
+
+.item p {
+  max-width: 62ch;
+  padding-bottom: 26px;
+  color: var(--ink-soft);
+}
+
+.item[open] p {
+  animation: answer 0.5s var(--ease-out);
+}
+
+@keyframes answer {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .head {
+    position: static;
+  }
+}
