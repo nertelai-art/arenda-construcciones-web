@@ -1,6 +1,8 @@
 import { Open_Sans, Schibsted_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import { getDictionary } from "@/content";
+import { DemoBadge } from "@/demo-kit/DemoBadge";
+import { DemoTracker } from "@/demo-kit/DemoTracker";
 import { homeAnchor, htmlLang, type Locale } from "@/lib/i18n";
 import { businessJsonLd } from "@/lib/seo";
 import { BrushDefs } from "../ui/Brush";
@@ -35,6 +37,9 @@ export function RootShell({ locale, children }: { locale: Locale; children: Reac
         <Footer locale={locale} t={t} />
         <MobileBar t={t.mobileBar} whatsappMessage={t.hero.whatsappMessage} contactHref={homeAnchor(locale, "#contacte")} />
         <RevealObserver />
+        <DemoTracker site="arenda-construcciones" />
+        {/* La insígnia de la demo només parla valencià i castellà. */}
+        <DemoBadge site="arenda-construcciones" locale={locale === "ca" ? "ca" : "es"} />
       </body>
     </html>
   );

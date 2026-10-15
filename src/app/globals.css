@@ -438,3 +438,10 @@ ol {
     display: inline-grid;
   }
 }
+
+/* La insígnia de la demo (src/demo-kit) va per sobre de la barra fixa del mòbil (MobileBar). */
+@media (max-width: 640px) {
+  :root {
+    --nertel-demo-bottom: calc(max(10px, env(safe-area-inset-bottom)) + 68px);
+  }
+}

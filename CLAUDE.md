@@ -118,15 +118,35 @@ Control d'aplicacions de Windows d'aquesta màquina el bloqueja (15-10-2026); pn
   La resta de branques fan previsualització en pujar-hi. L'`ignoreCommand` salta qualsevol build de
   producció que no vingui de `main`.
 - Producció pública: https://arenda-construcciones-web.vercel.app (primer desplegament,
-  14-10-2026, commit `7745662`). No s'indexa fins que sigui al domini del client.
+  14-10-2026, commit `7745662`). No s'indexa fins que sigui al domini del client. Quan hi arribi
+  el kit de demo, només s'obre amb enllaç personal (vegeu «Demo per a leads»).
 - El connector de Vercel no té permís per crear projectes (403). La CLI, sí, amb la sessió que ja hi
   ha en aquesta màquina: `pnpm dlx vercel@64.0.2 …`, des de PowerShell (el Git Bash converteix
   `/v9/...` en una ruta de Windows). Vercel agafa com a branca de producció la per defecte del
   repositori en el moment de connectar-lo: es va posar `main` per defecte un moment i es va tornar
   a `developer`.
 
+## Demo per a leads (`src/demo-kit`)
+
+- **El web és una demo per a un lead**: un cop desplegat, només s'hi entra amb un enllaç personal, i
+  qui no en porta veu la pàgina de bloqueig de Nertel. Els enllaços es fan amb
+  `pnpm demo:link "Nom del lead" --days 15`, que llegeix el secret de `.env.local` (el mateix que a
+  Vercel; no es puja mai).
+- El codi ve del kit comú de les demos (`../nertel-demo-kit`, skill `demo-leads`). **No s'edita
+  aquí**: es canvia al kit i es torna a copiar, perquè totes les demos siguin iguals.
+- Vercel: `DEMO_SECRET` i `DEMO_SITE` (la porta), i `NEXT_PUBLIC_POSTHOG_KEY` i
+  `NEXT_PUBLIC_POSTHOG_HOST` (el seguiment de les visites dels leads amb PostHog). Sense
+  `DEMO_SECRET` el web és obert.
+- Al mòbil, la insígnia va per sobre de la barra fixa (`--nertel-demo-bottom` a `globals.css`). Només
+  parla català i castellà: a la versió anglesa surt en castellà.
+- **Quan el web passi a ser el del client** es treu el kit: `src/proxy.ts`, `DemoTracker` i
+  `DemoBadge` de `RootShell`, la carpeta `src/demo-kit`, `posthog-js`, l'script `demo:link` i les
+  variables. I es revisa l'avís de galetes.
+
 ## Pendent abans de donar-lo per publicat
 
 - **Domini propi** (quality-constructions.com) i, amb ell, `SITE_URL` i `SITE_INDEXABLE=true`.
 - Proveïdor d'enviament del formulari (darrere d'una frontera pròpia) i, amb ell, l'avís de privacitat.
+- **L'avís de galetes diu que no n'hi ha ni hi ha analítica**: amb el kit de demo no és cert (galetes
+  de l'enllaç i PostHog). Abans que sigui el web del client, es treu el kit o es canvia l'avís.
 - Lighthouse i un iPhone de veritat: les escenes s'han mirat a Chrome d'escriptori i a mida de mòbil.
