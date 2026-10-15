@@ -81,8 +81,9 @@ del navegador està amagat i `requestAnimationFrame` queda congelat. Passos: `to
 ## Versions
 
 TypeScript 6 i ESLint 9 són a posta: `typescript-eslint` 8.71 no accepta TypeScript 7 i
-`eslint-plugin-react` 7.37 no arriba a ESLint 10 (mirat el 14-10-2026). Node 24 i pnpm 12, com a
-culleramotor. `@types/node` va a 24.
+`eslint-plugin-react` 7.37 no arriba a ESLint 10 (mirat el 14-10-2026). Node 24 i pnpm 11, com a
+culleramotor. `@types/node` va a 24. pnpm 12 no: és un binari natiu (`pnpm-native.exe`) i el
+Control d'aplicacions de Windows d'aquesta màquina el bloqueja (15-10-2026); pnpm 11 és JavaScript.
 
 `three` 0.186 avisa a la consola que `THREE.Clock` està obsolet: l'avís ve de dins de
 `@react-three/fiber` 9.8 i no es pot treure des d'aquí.
