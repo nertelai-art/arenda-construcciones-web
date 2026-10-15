@@ -81,8 +81,9 @@ del navegador està amagat i `requestAnimationFrame` queda congelat. Passos: `to
 ## Versions
 
 TypeScript 6 i ESLint 9 són a posta: `typescript-eslint` 8.71 no accepta TypeScript 7 i
-`eslint-plugin-react` 7.37 no arriba a ESLint 10 (mirat el 14-10-2026). Node 24 i pnpm 12, com a
-culleramotor. `@types/node` va a 24.
+`eslint-plugin-react` 7.37 no arriba a ESLint 10 (mirat el 14-10-2026). Node 24 i pnpm 11, com a
+culleramotor. `@types/node` va a 24. pnpm 12 no: és un binari natiu (`pnpm-native.exe`) i el
+Control d'aplicacions de Windows d'aquesta màquina el bloqueja (15-10-2026); pnpm 11 és JavaScript.
 
 `three` 0.186 avisa a la consola que `THREE.Clock` està obsolet: l'avís ve de dins de
 `@react-three/fiber` 9.8 i no es pot treure des d'aquí.
@@ -102,8 +103,50 @@ culleramotor. `@types/node` va a 24.
 - **Logotip**: el PNG del web actual (646 × 291). La versió per a fons fosc es genera a
   `pnpm images`; quan arribi el vector oficial, la substitueix.
 
-## Pendent abans de publicar
+## Repositori i desplegament
 
-- Repositori remot, projecte de Vercel i domini: no s'ha creat res fora d'aquesta màquina.
+- GitHub: `nertelai-art/arenda-construcciones-web`, **públic** (web de màrqueting, com Calvet).
+  `developer` és la branca d'integració i la per defecte; les branques de feina en surten i hi
+  tornen per PR, amb merge commit.
+- `main` és producció. **Hi arriba només quan l'usuari ho diu, cada vegada**, per PR des de
+  `developer`. Es va crear el 14-10-2026 des de `developer`, a mà, perquè no es pot obrir una PR cap
+  a una branca que no existeix; no s'hi torna a pujar res a mà.
+- Vercel: projecte `arenda-construcciones-web` (equip `nertelai-7298s-projects`), connectat al
+  repositori amb `main` com a branca de producció. Té el símbol QE com a icona (Avatar).
+- **Pujar a `main` no desplega**: `git.deploymentEnabled` de `vercel.json` ho desactiva a posta.
+  Producció és un pas explícit: crear el desplegament des de `main` (connector de Vercel o CLI).
+  La resta de branques fan previsualització en pujar-hi. L'`ignoreCommand` salta qualsevol build de
+  producció que no vingui de `main`.
+- Producció pública: https://arenda-construcciones-web.vercel.app (primer desplegament,
+  14-10-2026, commit `7745662`). No s'indexa fins que sigui al domini del client. Quan hi arribi
+  el kit de demo, només s'obre amb enllaç personal (vegeu «Demo per a leads»).
+- El connector de Vercel no té permís per crear projectes (403). La CLI, sí, amb la sessió que ja hi
+  ha en aquesta màquina: `pnpm dlx vercel@64.0.2 …`, des de PowerShell (el Git Bash converteix
+  `/v9/...` en una ruta de Windows). Vercel agafa com a branca de producció la per defecte del
+  repositori en el moment de connectar-lo: es va posar `main` per defecte un moment i es va tornar
+  a `developer`.
+
+## Demo per a leads (`src/demo-kit`)
+
+- **El web és una demo per a un lead**: un cop desplegat, només s'hi entra amb un enllaç personal, i
+  qui no en porta veu la pàgina de bloqueig de Nertel. Els enllaços es fan amb
+  `pnpm demo:link "Nom del lead" --days 15`, que llegeix el secret de `.env.local` (el mateix que a
+  Vercel; no es puja mai).
+- El codi ve del kit comú de les demos (`../nertel-demo-kit`, skill `demo-leads`). **No s'edita
+  aquí**: es canvia al kit i es torna a copiar, perquè totes les demos siguin iguals.
+- Vercel: `DEMO_SECRET` i `DEMO_SITE` (la porta), i `NEXT_PUBLIC_POSTHOG_KEY` i
+  `NEXT_PUBLIC_POSTHOG_HOST` (el seguiment de les visites dels leads amb PostHog). Sense
+  `DEMO_SECRET` el web és obert.
+- Al mòbil, la insígnia va per sobre de la barra fixa (`--nertel-demo-bottom` a `globals.css`). Només
+  parla català i castellà: a la versió anglesa surt en castellà.
+- **Quan el web passi a ser el del client** es treu el kit: `src/proxy.ts`, `DemoTracker` i
+  `DemoBadge` de `RootShell`, la carpeta `src/demo-kit`, `posthog-js`, l'script `demo:link` i les
+  variables. I es revisa l'avís de galetes.
+
+## Pendent abans de donar-lo per publicat
+
+- **Domini propi** (quality-constructions.com) i, amb ell, `SITE_URL` i `SITE_INDEXABLE=true`.
 - Proveïdor d'enviament del formulari (darrere d'una frontera pròpia) i, amb ell, l'avís de privacitat.
+- **L'avís de galetes diu que no n'hi ha ni hi ha analítica**: amb el kit de demo no és cert (galetes
+  de l'enllaç i PostHog). Abans que sigui el web del client, es treu el kit o es canvia l'avís.
 - Lighthouse i un iPhone de veritat: les escenes s'han mirat a Chrome d'escriptori i a mida de mòbil.
