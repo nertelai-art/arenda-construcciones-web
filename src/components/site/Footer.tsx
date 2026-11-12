@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Dictionary } from "@/content";
 import { homeAnchor, legalPath, type Locale } from "@/lib/i18n";
+import { nertelCreditUrl } from "@/lib/nertel-credit";
 import { site, whatsappUrl } from "@/lib/site";
 import { Brush } from "../ui/Brush";
 import { Facebook, Instagram } from "../ui/icons";
@@ -95,6 +96,16 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
           © {year} {site.legalName} · CIF {site.taxId} · {t.footer.rights}
         </p>
         <Link href={legalPath[locale]}>{t.footer.legal}</Link>
+      </div>
+
+      {/* Qui ha fet la web. Franja pròpia sota el peu, discreta, que porta a nertel.ai. */}
+      <div className={styles.credit}>
+        <a href={nertelCreditUrl(locale)} target="_blank" rel="noopener" className={styles.creditLink}>
+          <span>{t.footer.madeBy}</span>
+          {/* El blau marí del símbol és per a fons clars: sobre el peu fosc s'aclareix perquè es vegi sencer. */}
+          <Image src="/brand/nertel-mark.png" alt="" width={116} height={96} unoptimized className={styles.creditMark} />
+          <span className={styles.creditName}>Nertel</span>
+        </a>
       </div>
     </footer>
   );

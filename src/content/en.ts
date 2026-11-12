@@ -229,6 +229,7 @@ export const en: Dictionary = {
     follow: "Follow us",
     kitDigital: "Funded by the European Union – NextGenerationEU. Recovery, Transformation and Resilience Plan. Kit Digital programme.",
     rights: "All rights reserved.",
+    madeBy: "Website by",
   },
   mobileBar: { call: "Call", whatsapp: "WhatsApp", visit: "Free visit" },
   legal: {

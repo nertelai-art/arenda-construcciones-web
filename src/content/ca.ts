@@ -232,6 +232,7 @@ export const ca = {
     follow: "Segueix-nos",
     kitDigital: "Finançat per la Unió Europea – NextGenerationEU. Pla de Recuperació, Transformació i Resiliència. Programa Kit Digital.",
     rights: "Tots els drets reservats.",
+    madeBy: "Web feta per",
   },
   mobileBar: { call: "Truca", whatsapp: "WhatsApp", visit: "Visita gratuïta" },
   legal: {
