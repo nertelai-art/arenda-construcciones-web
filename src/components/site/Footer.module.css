@@ -1,5 +1,6 @@
+/* Sense marge a baix: el peu acaba amb la franja de crèdit, que porta el seu. */
 .footer {
-  padding-block: clamp(64px, 8vw, 104px) 28px;
+  padding-top: clamp(64px, 8vw, 104px);
   font-size: 0.95rem;
 }
 
@@ -117,6 +118,43 @@
   font-size: 0.85rem;
 }
 
+/* Qui ha fet la web: franja sota el peu, un to més fosca i amb una vora gairebé invisible. */
+.credit {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+  padding: 16px var(--gutter);
+  border-top: 1px solid rgb(246 243 238 / 0.06);
+  background: rgb(0 0 0 / 0.25);
+}
+
+.creditLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--on-dark-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.creditLink:hover {
+  color: var(--on-dark);
+}
+
+.creditMark {
+  width: auto;
+  height: 24px;
+  filter: brightness(2.2) saturate(1.2);
+}
+
+.creditName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
 @media (max-width: 960px) {
   .grid {
     grid-template-columns: 1fr 1fr;
@@ -133,7 +171,7 @@
   }
 
   /* Que la barra fixa de mòbil no tapi el final. */
-  .footer {
+  .credit {
     padding-bottom: 96px;
   }
 }

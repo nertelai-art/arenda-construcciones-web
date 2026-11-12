@@ -229,6 +229,7 @@ export const es: Dictionary = {
     follow: "Síguenos",
     kitDigital: "Financiado por la Unión Europea – NextGenerationEU. Plan de Recuperación, Transformación y Resiliencia. Programa Kit Digital.",
     rights: "Todos los derechos reservados.",
+    madeBy: "Web hecha por",
   },
   mobileBar: { call: "Llamar", whatsapp: "WhatsApp", visit: "Visita gratis" },
   legal: {
